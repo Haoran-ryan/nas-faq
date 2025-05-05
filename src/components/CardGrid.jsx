@@ -127,24 +127,24 @@ const CardGrid = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
-      {/* Header */}
-      <header className="bg-gray-800 shadow-md p-4">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
+    <div className="min-h-screen bg-gray-50 text-gray-900">
+      {/* Apple-style header */}
+      <header className="bg-white shadow-sm sticky top-0 z-30 backdrop-blur bg-opacity-90">
+        <div className="max-w-6xl mx-auto flex justify-between items-center p-4">
           <div className="flex items-center">
             <button
-              className="mr-4 p-2 rounded-full hover:bg-gray-700 lg:hidden touch-target"
+              className="mr-4 p-2 rounded-full hover:bg-gray-100 lg:hidden touch-target"
               onClick={toggleMenu}
               aria-label={menuOpen ? "Close menu" : "Open menu"}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="28"
-                height="28"
+                width="24"
+                height="24"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="2"
+                strokeWidth="1.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
@@ -164,30 +164,33 @@ const CardGrid = () => {
             </button>
 
             <div>
-              <h1 className="text-2xl font-bold">National Art School</h1>
-              <p className="text-gray-400 text-sm">
+              <h1 className="text-2xl font-semibold tracking-tight">
+                National Art School
+              </h1>
+              <p className="text-gray-500 text-sm">
                 Frequently Asked Questions
               </p>
             </div>
           </div>
 
+          {/* Apple-style search */}
           <div className="relative">
             <input
               type="text"
               placeholder="Search FAQs..."
-              className="bg-gray-700 text-white rounded-full py-3 pl-12 pr-10 w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="bg-gray-100 text-gray-900 rounded-full py-2 pl-10 pr-10 w-64 focus:outline-none focus:ring-2 focus:ring-gray-200"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="absolute left-4 top-3 text-gray-400"
-              width="20"
-              height="20"
+              className="absolute left-3 top-2.5 text-gray-500"
+              width="16"
+              height="16"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2"
+              strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
             >
@@ -197,18 +200,18 @@ const CardGrid = () => {
 
             {searchQuery && (
               <button
-                className="absolute right-4 top-3 text-gray-400 hover:text-white touch-target"
+                className="absolute right-3 top-2.5 text-gray-500 hover:text-gray-700 touch-target"
                 onClick={clearSearch}
                 aria-label="Clear search"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
+                  width="16"
+                  height="16"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="2"
+                  strokeWidth="1.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
@@ -221,11 +224,11 @@ const CardGrid = () => {
         </div>
       </header>
 
-      {/* Mobile menu overlay */}
+      {/* Mobile menu overlay - Apple style */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            className="fixed inset-0 bg-gray-900 bg-opacity-90 z-40 lg:hidden"
+            className="fixed inset-0 bg-white z-40 lg:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -233,18 +236,18 @@ const CardGrid = () => {
           >
             <div className="p-6">
               <button
-                className="absolute top-4 right-4 p-2 rounded-full bg-gray-800 touch-target"
+                className="absolute top-4 right-4 p-2 rounded-full bg-gray-100 touch-target"
                 onClick={toggleMenu}
                 aria-label="Close menu"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
+                  width="20"
+                  height="20"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="2"
+                  strokeWidth="1.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
@@ -253,7 +256,9 @@ const CardGrid = () => {
                 </svg>
               </button>
 
-              <h2 className="text-2xl font-bold mb-6">Categories</h2>
+              <h2 className="text-2xl font-semibold tracking-tight mb-6">
+                Categories
+              </h2>
 
               <div className="grid grid-cols-2 gap-4">
                 {categories.map((category, index) => (
@@ -263,8 +268,8 @@ const CardGrid = () => {
                       p-4 rounded-xl flex items-center space-x-3 touch-target
                       ${
                         activeCategory === category.id
-                          ? "bg-blue-600"
-                          : "bg-gray-800 hover:bg-gray-700"
+                          ? "bg-gray-100 text-blue-600"
+                          : "bg-white hover:bg-gray-50 text-gray-900"
                       }
                     `}
                     onClick={() => handleCategorySelect(category.id)}
@@ -280,7 +285,9 @@ const CardGrid = () => {
                     whileTap={{ scale: 0.95 }}
                   >
                     <span className="text-2xl">{category.icon}</span>
-                    <span className="text-lg font-medium">{category.name}</span>
+                    <span className="text-base font-medium">
+                      {category.name}
+                    </span>
                   </motion.button>
                 ))}
               </div>
@@ -290,11 +297,13 @@ const CardGrid = () => {
       </AnimatePresence>
 
       <div className="flex">
-        {/* Desktop category sidebar */}
-        <div className="hidden lg:block w-64 bg-gray-800 min-h-screen p-6">
-          <h2 className="text-xl font-bold mb-6">Categories</h2>
+        {/* Desktop category sidebar - Apple style */}
+        <div className="hidden lg:block w-64 min-h-screen p-6 border-r border-gray-200">
+          <h2 className="text-lg font-semibold tracking-tight mb-6">
+            Categories
+          </h2>
 
-          <div className="space-y-2">
+          <div className="space-y-1">
             {categories.map((category, index) => (
               <motion.button
                 key={category.id}
@@ -302,8 +311,8 @@ const CardGrid = () => {
                   w-full p-3 rounded-lg flex items-center space-x-3 text-left touch-target
                   ${
                     activeCategory === category.id
-                      ? "bg-blue-600"
-                      : "hover:bg-gray-700"
+                      ? "bg-gray-100 text-blue-600"
+                      : "hover:bg-gray-50 text-gray-900"
                   }
                 `}
                 onClick={() => handleCategorySelect(category.id)}
@@ -324,9 +333,9 @@ const CardGrid = () => {
           </div>
         </div>
 
-        {/* Main content */}
-        <main className="flex-1 p-6">
-          {/* Category tags - only show on mobile/tablet when not in menu */}
+        {/* Main content - Apple style */}
+        <main className="flex-1 p-6 md:p-8">
+          {/* Category pills - Apple style */}
           <div className="lg:hidden flex overflow-x-auto pb-4 space-x-2 mb-6">
             {categories.map((category, index) => (
               <motion.button
@@ -335,8 +344,8 @@ const CardGrid = () => {
                   flex-shrink-0 px-4 py-2 rounded-full touch-target
                   ${
                     activeCategory === category.id
-                      ? "bg-blue-600"
-                      : "bg-gray-700 hover:bg-gray-600"
+                      ? "bg-gray-100 text-blue-600 font-medium"
+                      : "bg-gray-50 hover:bg-gray-100 text-gray-900"
                   }
                 `}
                 onClick={() => handleCategorySelect(category.id)}
@@ -350,32 +359,32 @@ const CardGrid = () => {
                 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <span className="text-xl mr-2">{category.icon}</span>
+                <span className="text-base mr-2">{category.icon}</span>
                 <span>{category.name}</span>
               </motion.button>
             ))}
           </div>
 
-          {/* Results info */}
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold">
+          {/* Results header - Apple style */}
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-2xl font-semibold tracking-tight">
               {activeCategory === "all"
                 ? "All FAQs"
                 : `${
                     categories.find((c) => c.id === activeCategory)?.name
                   } FAQs`}
             </h2>
-            <p className="text-gray-400">
+            <p className="text-gray-500 text-sm">
               {filteredFaqs.length}{" "}
               {filteredFaqs.length === 1 ? "result" : "results"}
             </p>
           </div>
 
-          {/* Card grid */}
+          {/* Card grid - Apple style */}
           <motion.div
             className={`
-              grid grid-cols-12 gap-6
-              transition-all duration-300 ease-in-out
+              grid grid-cols-12 gap-6 md:gap-8
+              transition-all duration-300 ease-out
               ${
                 expandedCardId ? "opacity-0 pointer-events-none" : "opacity-100"
               }
@@ -389,7 +398,7 @@ const CardGrid = () => {
                 <Card key={faq.id} faq={faq} onExpand={handleCardExpand} />
               ))
             ) : (
-              <div className="col-span-12 p-8 bg-gray-800 rounded-xl text-center">
+              <div className="col-span-12 p-8 bg-white rounded-2xl text-center border border-gray-100 shadow-sm">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="mx-auto mb-4 text-gray-400"
@@ -398,7 +407,7 @@ const CardGrid = () => {
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="2"
+                  strokeWidth="1.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
@@ -407,13 +416,10 @@ const CardGrid = () => {
                   <line x1="12" y1="8" x2="12.01" y2="8"></line>
                 </svg>
                 <h3 className="text-xl font-medium mb-2">No results found</h3>
-                <p className="text-gray-400">
+                <p className="text-gray-500 mb-4">
                   Try adjusting your search or category filter
                 </p>
-                <button
-                  className="mt-4 px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-500 transition-colors touch-target"
-                  onClick={resetFilters}
-                >
+                <button className="apple-button" onClick={resetFilters}>
                   Reset filters
                 </button>
               </div>
@@ -422,7 +428,7 @@ const CardGrid = () => {
         </main>
       </div>
 
-      {/* Expanded card view */}
+      {/* Expanded card view - Apple style */}
       <AnimatePresence>
         {expandedCardId && expandedCard && (
           <ExpandedCard

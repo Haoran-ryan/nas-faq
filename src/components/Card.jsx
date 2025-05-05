@@ -30,7 +30,7 @@ const Card = ({ faq, onExpand }) => {
     <motion.div
       className={`
         ${cardSizeClasses}
-        rounded-3xl overflow-hidden shadow-lg 
+        apple-card overflow-hidden
         bg-gradient-to-br ${faq.bgGradient} 
         cursor-pointer p-6 flex flex-col
         relative
@@ -44,68 +44,69 @@ const Card = ({ faq, onExpand }) => {
       onClick={handleCardClick}
       layout
     >
-      {/* Touch indicator - optimized for LG STANDBYME touch screen */}
+      {/* Apple-style touch indicator */}
       <div className="absolute bottom-4 right-4 touch-target">
-        <span className="flex items-center justify-center w-10 h-10 bg-white bg-opacity-30 rounded-full">
+        <span className="flex items-center justify-center w-10 h-10 bg-white bg-opacity-20 rounded-full">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
+            width="16"
+            height="16"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="text-white"
+            className={faq.textColor}
           >
-            <path d="M14 14.76V3a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v11.76"></path>
-            <path d="M12 21a9 9 0 0 0 9-9"></path>
-            <path d="M3 12a9 9 0 0 1 9-9"></path>
+            <path d="M12 5v14"></path>
+            <path d="m19 12-7 7-7-7"></path>
           </svg>
         </span>
       </div>
 
-      {/* Category badge - larger for touch */}
-      <div className="absolute top-4 right-4 bg-white bg-opacity-20 rounded-full px-4 py-2">
-        <span className="text-white text-sm font-medium">{faq.category}</span>
+      {/* Category badge - Apple style */}
+      <div className="absolute top-4 right-4 apple-badge bg-white bg-opacity-10">
+        <span className={`${faq.textColor}`}>{faq.category}</span>
       </div>
 
-      {/* Icon - larger for visibility */}
-      <div className="text-4xl mb-4">{faq.icon}</div>
+      {/* Icon - Apple style */}
+      <div className="text-3xl mb-4">{faq.icon}</div>
 
-      {/* Question - larger text for readability on the large screen */}
+      {/* Question - Apple typography */}
       <h3
-        className={`text-white font-bold mb-3 ${
-          faq.type === "large" ? "text-3xl" : "text-2xl"
+        className={`${faq.textColor} font-medium tracking-tight mb-3 ${
+          faq.type === "large" ? "text-2xl" : "text-xl"
         }`}
       >
         {faq.question}
       </h3>
 
-      {/* Answer preview */}
-      <p className="text-white text-opacity-80 line-clamp-2 text-lg">
+      {/* Answer preview - Apple style */}
+      <p
+        className={`${faq.textColor} opacity-80 line-clamp-2 text-base font-light`}
+      >
         {faq.answer.length > 120
           ? faq.answer.substring(0, 120) + "..."
           : faq.answer}
       </p>
 
-      {/* Read more indicator - enhanced for touch */}
+      {/* Read more indicator - Apple style */}
       <div className="mt-auto pt-3 flex items-center">
-        <span className="text-white text-base font-medium">
-          Tap to read more
+        <span className={`${faq.textColor} text-sm font-medium`}>
+          Read more
         </span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
+          width="16"
+          height="16"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="2"
+          strokeWidth="1.5"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="ml-2 text-white"
+          className={`ml-2 ${faq.textColor}`}
         >
           <path d="m9 18 6-6-6-6"></path>
         </svg>

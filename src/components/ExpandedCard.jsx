@@ -1,18 +1,12 @@
 // src/components/ExpandedCard.jsx
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  expandedCardVariants,
-  overlayVariants,
-  stackedCardVariants,
-  slideUpPanelVariants,
-  addTouchFeedback,
-} from "../utils/animation";
+import { addTouchFeedback } from "../utils/animation";
 
 const ExpandedCard = ({ faq, onClose, relatedCards = [], onSelectRelated }) => {
   const [showRelatedCards, setShowRelatedCards] = useState(false);
 
-  // Format answer text for better readability
+  // Format answer text for better readability - Apple style
   const formatAnswer = (answer) => {
     // Check if the answer contains numbered steps
     if (answer.includes("1.")) {
@@ -28,23 +22,25 @@ const ExpandedCard = ({ faq, onClose, relatedCards = [], onSelectRelated }) => {
 
       if (steps.length === 0) {
         return (
-          <p className="text-white text-opacity-90 text-xl leading-relaxed selectable-text">
+          <p
+            className={`${faq.textColor} text-opacity-90 text-lg leading-relaxed font-light selectable-text`}
+          >
             {answer}
           </p>
         );
       }
 
       return (
-        <ol className="list-none pl-0 space-y-4 mt-6">
+        <ol className="list-none pl-0 space-y-6 mt-6">
           {steps.map((step, index) => (
             <li
               key={index}
-              className="text-white text-opacity-90 text-xl flex items-start selectable-text"
+              className={`${faq.textColor} text-opacity-90 text-lg flex items-start selectable-text`}
             >
-              <span className="bg-white bg-opacity-20 rounded-full w-10 h-10 flex items-center justify-center mr-4 flex-shrink-0">
+              <span className="bg-white bg-opacity-20 rounded-full w-8 h-8 flex items-center justify-center mr-4 flex-shrink-0 text-sm">
                 {index + 1}
               </span>
-              <span>{step.replace(/^\d+\.\s/, "")}</span>
+              <span className="font-light">{step.replace(/^\d+\.\s/, "")}</span>
             </li>
           ))}
         </ol>
@@ -54,11 +50,11 @@ const ExpandedCard = ({ faq, onClose, relatedCards = [], onSelectRelated }) => {
       const paragraphs = answer.split(/\n+/);
 
       return (
-        <div className="space-y-4">
+        <div className="space-y-6">
           {paragraphs.map((paragraph, index) => (
             <p
               key={index}
-              className="text-white text-opacity-90 text-xl leading-relaxed selectable-text"
+              className={`${faq.textColor} text-opacity-90 text-lg leading-relaxed font-light selectable-text`}
             >
               {paragraph}
             </p>
@@ -87,68 +83,118 @@ const ExpandedCard = ({ faq, onClose, relatedCards = [], onSelectRelated }) => {
     onSelectRelated(id);
   };
 
+  // Animation variants - Apple-style smooth animations
+  const overlayVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
+    },
+    exit: {
+      opacity: 0,
+      transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { scale: 0.95, opacity: 0 },
+    visible: {
+      scale: 1,
+      opacity: 1,
+      transition: {
+        duration: 0.4,
+        ease: [0.16, 1, 0.3, 1],
+      },
+    },
+    exit: {
+      scale: 0.95,
+      opacity: 0,
+      transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
+    },
+  };
+
+  const panelVariants = {
+    hidden: { y: "100%" },
+    visible: {
+      y: "0%",
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 30,
+      },
+    },
+    exit: {
+      y: "100%",
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 30,
+      },
+    },
+  };
+
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black bg-opacity-50 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-gray-800 bg-opacity-30 backdrop-blur-sm"
       variants={overlayVariants}
-      initial="initial"
-      animate="animate"
+      initial="hidden"
+      animate="visible"
       exit="exit"
     >
       <motion.div
         className={`
           bg-gradient-to-br ${faq.bgGradient}
-          rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh]
+          apple-card w-full max-w-4xl max-h-[90vh]
           overflow-hidden relative flex flex-col
         `}
-        variants={expandedCardVariants}
-        initial="initial"
-        animate="animate"
+        variants={cardVariants}
+        initial="hidden"
+        animate="visible"
         exit="exit"
       >
-        {/* Header with back button */}
-        <div className="p-6 flex justify-between items-center border-b border-white border-opacity-20">
+        {/* Header with back button - Apple style */}
+        <div className="p-5 flex justify-between items-center border-b border-gray-200 border-opacity-20">
           <button
-            className="bg-white bg-opacity-20 hover:bg-opacity-30 
-                     text-white rounded-full p-4 transition-colors touch-target"
+            className="rounded-full p-2 bg-white bg-opacity-10 hover:bg-opacity-20 transition-colors touch-target"
             onClick={handleClose}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
+              width="20"
+              height="20"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2"
+              strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
+              className={faq.textColor}
             >
               <path d="m15 18-6-6 6-6"></path>
             </svg>
           </button>
 
           <div className="text-center">
-            <span className="text-white text-xl font-medium">
+            <span className={`${faq.textColor} text-base font-medium`}>
               {faq.category}
             </span>
           </div>
 
           <button
-            className="bg-white bg-opacity-20 hover:bg-opacity-30 
-                     text-white rounded-full p-4 transition-colors touch-target"
+            className="rounded-full p-2 bg-white bg-opacity-10 hover:bg-opacity-20 transition-colors touch-target"
             onClick={handleClose}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
+              width="20"
+              height="20"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2"
+              strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
+              className={faq.textColor}
             >
               <path d="M18 6 6 18"></path>
               <path d="m6 6 12 12"></path>
@@ -156,38 +202,44 @@ const ExpandedCard = ({ faq, onClose, relatedCards = [], onSelectRelated }) => {
           </button>
         </div>
 
-        {/* Content area with scrolling */}
+        {/* Content area with scrolling - Apple style */}
         <div className="p-8 overflow-y-auto flex-grow">
-          {/* Question */}
+          {/* Question - Apple typography */}
           <div className="flex items-start mb-8">
-            <div className="text-5xl mr-4">{faq.icon}</div>
-            <h2 className="text-white text-4xl font-bold">{faq.question}</h2>
+            <div className="text-4xl mr-4">{faq.icon}</div>
+            <h2
+              className={`${faq.textColor} text-3xl font-medium tracking-tight`}
+            >
+              {faq.question}
+            </h2>
           </div>
 
-          {/* Answer */}
+          {/* Answer - Apple typography */}
           <div className="mt-6 mb-8">{formatAnswer(faq.answer)}</div>
 
-          {/* Additional resources */}
-          <div className="mt-8 pt-6 border-t border-white border-opacity-20">
-            <h4 className="text-white text-2xl font-medium mb-4">Learn more</h4>
+          {/* Additional resources - Apple style */}
+          <div className="mt-8 pt-6 border-t border-gray-200 border-opacity-20">
+            <h4 className={`${faq.textColor} text-xl font-medium mb-4`}>
+              Learn more
+            </h4>
             <a
               href="https://nas.edu.au"
               target="_blank"
               rel="noreferrer"
-              className="text-white text-xl flex items-center hover:underline touch-target"
+              className={`${faq.textColor} text-lg flex items-center hover:underline touch-target group`}
             >
               Visit nas.edu.au
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
+                width="16"
+                height="16"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="2"
+                strokeWidth="1.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="ml-2"
+                className={`ml-2 ${faq.textColor} transition-transform group-hover:translate-x-1`}
               >
                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                 <polyline points="15 3 21 3 21 9"></polyline>
@@ -197,13 +249,15 @@ const ExpandedCard = ({ faq, onClose, relatedCards = [], onSelectRelated }) => {
           </div>
         </div>
 
-        {/* Footer with related questions toggle - only show if there are related cards */}
+        {/* Footer with related questions toggle - Apple style */}
         {relatedCards.length > 0 && (
-          <div className="p-6 border-t border-white border-opacity-20">
+          <div className="p-6 border-t border-gray-200 border-opacity-20">
             <button
-              className="w-full bg-white bg-opacity-20 hover:bg-opacity-30
-                       text-white rounded-xl p-4 text-xl font-medium
-                       flex items-center justify-center transition-colors touch-target"
+              className={`
+                w-full rounded-xl p-3.5 text-base font-medium
+                flex items-center justify-center transition-colors touch-target
+                ${faq.textColor} bg-white bg-opacity-10 hover:bg-opacity-20
+              `}
               onClick={toggleRelatedCards}
             >
               {showRelatedCards
@@ -211,17 +265,17 @@ const ExpandedCard = ({ faq, onClose, relatedCards = [], onSelectRelated }) => {
                 : "Show Related Questions"}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
+                width="16"
+                height="16"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="2"
+                strokeWidth="1.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 className={`ml-2 transition-transform ${
                   showRelatedCards ? "rotate-180" : ""
-                }`}
+                } ${faq.textColor}`}
               >
                 <path d="m6 9 6 6 6-6"></path>
               </svg>
@@ -229,19 +283,19 @@ const ExpandedCard = ({ faq, onClose, relatedCards = [], onSelectRelated }) => {
           </div>
         )}
 
-        {/* Related cards panel */}
+        {/* Related cards panel - Apple style */}
         <AnimatePresence>
           {relatedCards.length > 0 && showRelatedCards && (
             <motion.div
-              className="absolute inset-x-0 bottom-0 bg-gray-900 rounded-t-3xl overflow-hidden z-10"
-              variants={slideUpPanelVariants}
-              initial="initial"
-              animate="animate"
+              className="absolute inset-x-0 bottom-0 bg-gray-50 dark:bg-gray-900 rounded-t-3xl overflow-hidden z-10 shadow-lg"
+              variants={panelVariants}
+              initial="hidden"
+              animate="visible"
               exit="exit"
             >
-              <div className="p-6 border-b border-gray-800">
-                <div className="w-16 h-1 bg-gray-700 mx-auto rounded-full mb-6"></div>
-                <h3 className="text-2xl font-bold text-white mb-4">
+              <div className="p-6 border-b border-gray-200 dark:border-gray-800">
+                <div className="w-12 h-1 bg-gray-300 dark:bg-gray-700 mx-auto rounded-full mb-6"></div>
+                <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-4">
                   Related Questions
                 </h3>
               </div>
@@ -252,19 +306,22 @@ const ExpandedCard = ({ faq, onClose, relatedCards = [], onSelectRelated }) => {
                     key={card.id}
                     className={`
                       bg-gradient-to-br ${card.bgGradient}
-                      rounded-xl p-5 shadow-md cursor-pointer
-                      hover:shadow-lg transition-shadow touch-target
-                      touch-feedback
+                      apple-card p-5 cursor-pointer touch-target
+                      hover:shadow-md hover:-translate-y-1 transition-all
                     `}
                     onClick={() => handleSelectRelated(card.id)}
                   >
                     <div className="flex items-start">
-                      <div className="text-3xl mr-3">{card.icon}</div>
+                      <div className="text-2xl mr-3">{card.icon}</div>
                       <div>
-                        <h4 className="text-xl font-bold text-white mb-1">
+                        <h4
+                          className={`${card.textColor} text-lg font-medium mb-1`}
+                        >
                           {card.question}
                         </h4>
-                        <p className="text-white text-opacity-70 text-sm line-clamp-1">
+                        <p
+                          className={`${card.textColor} opacity-70 text-sm line-clamp-1`}
+                        >
                           {card.category}
                         </p>
                       </div>
@@ -277,23 +334,34 @@ const ExpandedCard = ({ faq, onClose, relatedCards = [], onSelectRelated }) => {
         </AnimatePresence>
       </motion.div>
 
-      {/* Stacked cards on the side for LG STANDBYME display */}
+      {/* Stacked cards on the side - Apple style */}
       <div className="absolute right-6 top-1/4 hidden lg:flex flex-col space-y-4 z-30">
         {relatedCards.slice(0, 3).map((card, index) => (
           <motion.div
             key={card.id}
             className={`
               bg-gradient-to-br ${card.bgGradient}
-              rounded-2xl p-4 shadow-lg cursor-pointer
-              w-64 touch-target touch-feedback
+              apple-card p-4 cursor-pointer w-64 touch-target
+              hover:shadow-md hover:-translate-y-1 transition-all
             `}
-            custom={index}
-            variants={stackedCardVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            whileHover="hover"
-            whileTap="tap"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{
+              opacity: 1,
+              x: 0,
+              transition: {
+                duration: 0.3,
+                delay: 0.1 * index,
+                ease: [0.16, 1, 0.3, 1],
+              },
+            }}
+            exit={{
+              opacity: 0,
+              x: 50,
+              transition: {
+                duration: 0.2,
+                ease: [0.16, 1, 0.3, 1],
+              },
+            }}
             onClick={() => handleSelectRelated(card.id)}
             style={{
               translateX: `${index * 10}px`,
@@ -302,10 +370,10 @@ const ExpandedCard = ({ faq, onClose, relatedCards = [], onSelectRelated }) => {
             }}
           >
             <div className="text-2xl mb-2">{card.icon}</div>
-            <h3 className="text-white font-bold mb-1 line-clamp-1">
+            <h3 className={`${card.textColor} font-medium mb-1 line-clamp-1`}>
               {card.question}
             </h3>
-            <p className="text-white text-opacity-80 text-sm line-clamp-1">
+            <p className={`${card.textColor} opacity-70 text-sm line-clamp-1`}>
               {card.category}
             </p>
           </motion.div>
