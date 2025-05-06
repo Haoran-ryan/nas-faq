@@ -12,6 +12,28 @@ const CardGrid = () => {
   const [activeCategory, setActiveCategory] = useState("all");
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isLandscape, setIsLandscape] = useState(false);
+
+  // Check orientation on mount and when window resizes
+  useEffect(() => {
+    const checkOrientation = () => {
+      // For LG STANDBYME 2 (1920 x 1080), check if it's in landscape mode
+      // We'll consider it landscape when width > height
+      setIsLandscape(window.innerWidth > window.innerHeight);
+    };
+
+    // Initial check
+    checkOrientation();
+
+    // Listen for resize or orientation change events
+    window.addEventListener("resize", checkOrientation);
+    window.addEventListener("orientationchange", checkOrientation);
+
+    return () => {
+      window.removeEventListener("resize", checkOrientation);
+      window.removeEventListener("orientationchange", checkOrientation);
+    };
+  }, []);
 
   // Generate categories from FAQ data
   const categories = useMemo(() => {
@@ -133,7 +155,8 @@ const CardGrid = () => {
         <div className="max-w-6xl mx-auto flex justify-between items-center p-4">
           <div className="flex items-center">
             <button
-              className="mr-4 p-2 rounded-full hover:bg-gray-100 lg:hidden touch-target"
+              className={`mr-4 p-2 rounded-full hover:bg-gray-100 touch-target 
+                ${!isLandscape ? "lg:hidden" : ""}`}
               onClick={toggleMenu}
               aria-label={menuOpen ? "Close menu" : "Open menu"}
             >
@@ -297,8 +320,12 @@ const CardGrid = () => {
       </AnimatePresence>
 
       <div className="flex">
-        {/* Desktop category sidebar - Apple style */}
-        <div className="hidden lg:block w-64 min-h-screen p-6 border-r border-gray-200">
+        {/* Desktop category sidebar - Apple style - hide in landscape on LG STANDBYME */}
+        <div
+          className={`${
+            isLandscape ? "hidden" : "hidden lg:block"
+          } w-64 min-h-screen p-6 border-r border-gray-200`}
+        >
           <h2 className="text-lg font-semibold tracking-tight mb-6">
             Categories
           </h2>
@@ -335,8 +362,12 @@ const CardGrid = () => {
 
         {/* Main content - Apple style */}
         <main className="flex-1 p-6 md:p-8">
-          {/* Category pills - Apple style */}
-          <div className="lg:hidden flex overflow-x-auto pb-4 space-x-2 mb-6">
+          {/* Category pills - Apple style - show in landscape mode too */}
+          <div
+            className={`${
+              !isLandscape ? "lg:hidden" : ""
+            } flex overflow-x-auto pb-4 space-x-2 mb-6`}
+          >
             {categories.map((category, index) => (
               <motion.button
                 key={category.id}
@@ -380,10 +411,12 @@ const CardGrid = () => {
             </p>
           </div>
 
-          {/* Card grid - Apple style */}
+          {/* Card grid - Apple style with landscape-specific grid */}
           <motion.div
             className={`
-              grid grid-cols-12 gap-6 md:gap-8
+              grid ${
+                isLandscape ? "grid-cols-12" : "grid-cols-12"
+              } gap-6 md:gap-8
               transition-all duration-300 ease-out
               ${
                 expandedCardId ? "opacity-0 pointer-events-none" : "opacity-100"
@@ -395,7 +428,12 @@ const CardGrid = () => {
           >
             {filteredFaqs.length > 0 ? (
               filteredFaqs.map((faq) => (
-                <Card key={faq.id} faq={faq} onExpand={handleCardExpand} />
+                <Card
+                  key={faq.id}
+                  faq={faq}
+                  onExpand={handleCardExpand}
+                  isLandscape={isLandscape}
+                />
               ))
             ) : (
               <div className="col-span-12 p-8 bg-white rounded-2xl text-center border border-gray-100 shadow-sm">
@@ -436,6 +474,7 @@ const CardGrid = () => {
             onClose={handleCardClose}
             relatedCards={getRelatedCards()}
             onSelectRelated={handleCardExpand}
+            isLandscape={isLandscape}
           />
         )}
       </AnimatePresence>

@@ -2,22 +2,40 @@
 import { motion } from "framer-motion";
 import { cardVariants, addTouchFeedback } from "../utils/animation";
 
-const Card = ({ faq, onExpand }) => {
-  // Determine card size based on type
+const Card = ({ faq, onExpand, isLandscape }) => {
+  // Determine card size based on type and orientation
   let cardSizeClasses = "";
 
-  switch (faq.type) {
-    case "large":
-      cardSizeClasses = "col-span-12 md:col-span-6 row-span-2 min-h-[220px]";
-      break;
-    case "medium":
-      cardSizeClasses = "col-span-6 md:col-span-4 row-span-2 min-h-[220px]";
-      break;
-    case "small":
-      cardSizeClasses = "col-span-6 md:col-span-3 row-span-1 min-h-[180px]";
-      break;
-    default:
-      cardSizeClasses = "col-span-6 md:col-span-3 row-span-1 min-h-[180px]";
+  if (isLandscape) {
+    // Landscape mode has a different grid layout optimized for horizontal display
+    switch (faq.type) {
+      case "large":
+        cardSizeClasses = "col-span-6 md:col-span-4 row-span-2 min-h-[180px]";
+        break;
+      case "medium":
+        cardSizeClasses = "col-span-4 md:col-span-3 row-span-2 min-h-[180px]";
+        break;
+      case "small":
+        cardSizeClasses = "col-span-3 md:col-span-2 row-span-1 min-h-[150px]";
+        break;
+      default:
+        cardSizeClasses = "col-span-3 md:col-span-2 row-span-1 min-h-[150px]";
+    }
+  } else {
+    // Portrait mode (vertical) - original layout
+    switch (faq.type) {
+      case "large":
+        cardSizeClasses = "col-span-12 md:col-span-6 row-span-2 min-h-[220px]";
+        break;
+      case "medium":
+        cardSizeClasses = "col-span-6 md:col-span-4 row-span-2 min-h-[220px]";
+        break;
+      case "small":
+        cardSizeClasses = "col-span-6 md:col-span-3 row-span-1 min-h-[180px]";
+        break;
+      default:
+        cardSizeClasses = "col-span-6 md:col-span-3 row-span-1 min-h-[180px]";
+    }
   }
 
   // Handle card click with touch feedback
@@ -73,20 +91,31 @@ const Card = ({ faq, onExpand }) => {
       {/* Icon - Apple style */}
       <div className="text-3xl mb-4">{faq.icon}</div>
 
-      {/* Question - Apple typography */}
+      {/* Question - Apple typography - adjust size for landscape */}
       <h3
-        className={`${faq.textColor} font-medium tracking-tight mb-3 ${
-          faq.type === "large" ? "text-2xl" : "text-xl"
+        className={`${faq.textColor} font-medium tracking-tight mb-3 
+        ${
+          isLandscape
+            ? faq.type === "large"
+              ? "text-xl"
+              : "text-lg"
+            : faq.type === "large"
+            ? "text-2xl"
+            : "text-xl"
         }`}
       >
         {faq.question}
       </h3>
 
-      {/* Answer preview - Apple style */}
+      {/* Answer preview - Apple style - potentially truncate more for landscape */}
       <p
         className={`${faq.textColor} opacity-80 line-clamp-2 text-base font-light`}
       >
-        {faq.answer.length > 120
+        {isLandscape
+          ? faq.answer.length > 80
+            ? faq.answer.substring(0, 80) + "..."
+            : faq.answer
+          : faq.answer.length > 120
           ? faq.answer.substring(0, 120) + "..."
           : faq.answer}
       </p>
