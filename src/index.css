@@ -6,7 +6,7 @@
 @layer base {
   html {
     font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI",
-      Roboto, Helvetica, Arial, sans-serif;
+    Roboto, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-tap-highlight-color: transparent;
@@ -103,6 +103,73 @@
   .apple-badge {
     @apply rounded-full px-3 py-1 text-xs font-medium;
     backdrop-filter: blur(10px);
+  }
+
+  /* Video button specific styles */
+  .video-button {
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .video-button:hover {
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.15));
+    transform: translateY(-2px);
+  }
+
+  .video-button:active {
+    transform: translateY(1px);
+  }
+
+  .modal-backdrop {
+    backdrop-filter: blur(8px);
+  }
+
+  /* Video responsive container */
+  .video-container {
+    position: relative;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    height: 0;
+    overflow: hidden;
+  }
+
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  /* Improve touch target for close button */
+  .modal-close-button {
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  .modal-close-button:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+
+  /* Apple-style animation for modal */
+  @keyframes modalFadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95) translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  .animate-modal-open {
+    animation: modalFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 }
 

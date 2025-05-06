@@ -19,7 +19,7 @@ const CardGrid = () => {
     const checkOrientation = () => {
       // For LG STANDBYME 2 (1920 x 1080), check if it's in landscape mode
       // We'll consider it landscape when width > height
-      setIsLandscape(window.innerWidth > window.innerHeight);
+      setIsLandscape(window.innerWidth < window.innerHeight);
     };
 
     // Initial check
