@@ -166,7 +166,7 @@ const VideoModal = () => {
                             <div className="video-container">
                                 <iframe
                                     title="vimeo-player"
-                                    src="https://player.vimeo.com/video/466027086?h=9fbc021bd0&autoplay=1"
+                                    src="https://player.vimeo.com/video/466027086?h=9fbc021bd0&autoplay=1&loop=1"
                                     frameBorder="0"
                                     allowFullScreen
                                     allow="autoplay; fullscreen; picture-in-picture"
